@@ -26,7 +26,6 @@ describe("ProximosServiciosView", () => {
   it("clones a service", () => {
     const s = createService({ date: "2026-06-15", time: "10:00", typeId: "Domingo", location: "Auditorio", areaIds: ["a1"] });
     useAppStore.setState({ services: [s] });
-    const addService = vi.fn();
     render(<MemoryRouter><ProximosServiciosView /></MemoryRouter>);
     fireEvent.click(screen.getByText("Clonar"));
     expect(useAppStore.getState().services.length).toBeGreaterThanOrEqual(2);

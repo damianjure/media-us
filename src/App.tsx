@@ -10,6 +10,7 @@ import { TeamManagementView } from "./infrastructure/ui/TeamManagementView";
 import { WireframesView } from "./infrastructure/ui/WireframesView";
 import { AreasView } from "./infrastructure/ui/AreasView";
 import { TemplatesView } from "./infrastructure/ui/TemplatesView";
+import { ProximosServiciosView } from "./infrastructure/ui/ProximosServiciosView";
 
 const router = createBrowserRouter([
   { path: "/", element: <AuthScreen /> },
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
   { path: "/wireframes", element: <WireframesView /> },
   { path: "/areas", element: <AreasView /> },
   { path: "/templates", element: <TemplatesView /> },
+  { path: "/proximos", element: <ProximosServiciosView /> },
 ]);
 
 export function App() {

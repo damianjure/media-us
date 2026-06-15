@@ -1,12 +1,27 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Clock, Plus } from "lucide-react";
+import { Clock, Plus, Copy } from "lucide-react";
 import { useAppStore } from "./useAppStore";
 import { ServiceWizard } from "./ServiceWizard";
+import { createService } from "../../domain/models/Service";
 
 export function ServicesListView() {
   const { services, addService, invitations } = useAppStore();
   const [showForm, setShowForm] = useState(false);
+
+  const handleClone = (source: typeof services[0]) => {
+    const nextWeek = new Date(source.date);
+    nextWeek.setDate(nextWeek.getDate() + 7);
+    addService(createService({
+      date: nextWeek.toISOString().slice(0, 10),
+      time: source.time,
+      endTime: source.endTime,
+      typeId: source.typeId,
+      location: source.location,
+      areaIds: source.areaIds,
+      notes: source.notes,
+    }));
+  };
 
   const statusColors: Record<string, string> = {
     draft: "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400",
@@ -74,6 +89,10 @@ export function ServicesListView() {
                   <span className="text-xs font-medium text-red-500">{cnt.declined} ✗</span>
                   <span className="text-xs font-medium text-amber-500">{cnt.pending} ⏳</span>
                 </div>
+                <button onClick={(e) => { e.preventDefault(); handleClone(s); }}
+                  className="mt-2 flex items-center gap-1 text-xs text-indigo-600 font-medium">
+                  <Copy className="w-3 h-3" /> Clonar
+                </button>
               </Link>
             );
           })}

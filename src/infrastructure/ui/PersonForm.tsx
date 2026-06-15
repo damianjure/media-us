@@ -40,7 +40,7 @@ export function PersonForm({
           className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm" />
         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
       </div>
-      <button type="submit" className="w-full py-3 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors">
+      <button type="submit" className="w-full py-3 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors active:scale-[0.98]">
         Guardar
       </button>
     </form>

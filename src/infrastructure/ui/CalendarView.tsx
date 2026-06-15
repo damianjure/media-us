@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { useAppStore } from "./useAppStore";
 import { ServiceWizard } from "./ServiceWizard";
 
@@ -88,6 +88,15 @@ export function CalendarView() {
           );
         })}
       </div>
+
+      {/* FAB — crear servicio */}
+      <button
+        onClick={() => { setSelectedDate(new Date().toISOString().slice(0, 10)); setShowWizard(true); }}
+        className="fixed bottom-20 right-4 w-14 h-14 bg-indigo-600 hover:bg-indigo-700 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/25 active:scale-95 transition-transform z-30"
+        aria-label="Crear servicio"
+      >
+        <Plus className="w-6 h-6 text-white" />
+      </button>
     </div>
   );
 }

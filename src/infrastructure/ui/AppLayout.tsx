@@ -18,14 +18,14 @@ export function AppLayout() {
 
   return (
     <div className="flex flex-col h-dvh bg-slate-50 dark:bg-slate-950">
-      <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pt-safe">
         <h1 className="text-lg font-bold text-slate-900 dark:text-white">
           Media Us
         </h1>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             <Menu className="w-5 h-5 text-slate-600 dark:text-slate-300" />
           </button>
@@ -105,14 +105,14 @@ export function AppLayout() {
         </AnimatePresence>
       </main>
 
-      <nav className="flex items-center justify-around py-2 px-1 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <nav className="flex items-center justify-around py-2 px-1 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pb-safe">
         {tabs.map(({ to, icon: Icon, label, end }) => (
           <NavLink
             key={to}
             to={to}
             end={end}
             className={({ isActive }) =>
-              `flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg text-xs transition-colors ${
+              `flex flex-col items-center gap-0.5 p-2 rounded-lg text-xs transition-colors min-h-[44px] justify-center ${
                 isActive
                   ? "text-indigo-600 dark:text-indigo-400"
                   : "text-slate-400 dark:text-slate-500"

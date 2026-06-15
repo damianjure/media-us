@@ -7,7 +7,7 @@ import { createService } from "../../domain/models/Service";
 
 describe("ServicesListView", () => {
   beforeEach(() => {
-    useAppStore.setState({ services: [], invitations: [] });
+    useAppStore.setState({ services: [], invitations: [], people: [], areas: [] });
   });
 
   it("renders title", () => {
@@ -22,7 +22,7 @@ describe("ServicesListView", () => {
 
   it("renders service cards when data exists", () => {
     const s = createService({ date: "2026-06-15", time: "10:00", typeId: "Domingo" });
-    useAppStore.setState({ services: [s], invitations: [] });
+    useAppStore.setState({ services: [s], invitations: [], people: [] });
     render(<MemoryRouter><ServicesListView /></MemoryRouter>);
     expect(screen.getByText("Domingo")).toBeInTheDocument();
   });

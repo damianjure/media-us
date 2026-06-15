@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Clock, Plus } from "lucide-react";
 import { useAppStore } from "./useAppStore";
-import { ServiceForm } from "./ServiceForm";
-import { createService } from "../../domain/models/Service";
+import { ServiceWizard } from "./ServiceWizard";
 
 export function ServicesListView() {
   const { services, addService, invitations } = useAppStore();
@@ -41,17 +40,7 @@ export function ServicesListView() {
         </button>
       </div>
 
-      {showForm && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-end sm:items-center justify-center" onClick={() => setShowForm(false)}>
-          <div className="bg-white dark:bg-slate-900 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md" onClick={(e) => e.stopPropagation()}>
-            <ServiceForm onSubmit={(data) => {
-              const s = createService(data);
-              addService(s);
-              setShowForm(false);
-            }} />
-          </div>
-        </div>
-      )}
+      {showForm && <ServiceWizard onClose={() => setShowForm(false)} onSubmit={(s) => { addService(s); setShowForm(false); }} />}
 
       {services.length === 0 ? (
         <p className="text-sm text-slate-400 text-center py-12">No hay servicios. Creá tu primer servicio.</p>

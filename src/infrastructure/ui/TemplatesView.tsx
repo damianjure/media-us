@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Plus, Layers, ChevronRight } from "lucide-react";
+import { Plus, Layers } from "lucide-react";
 import { useAppStore } from "./useAppStore";
 import { ServiceWizard } from "./ServiceWizard";
 import { createTemplate, type ServiceTemplate } from "../../domain/models/ServiceTemplate";

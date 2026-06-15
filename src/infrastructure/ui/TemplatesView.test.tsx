@@ -7,9 +7,9 @@ import { createTemplate } from "../../domain/models/ServiceTemplate";
 
 describe("TemplatesView", () => {
   it("shows empty state when no templates", () => {
-    useAppStore.setState({ templates: [], areas: [] });
+    useAppStore.setState({ templates: [], areas: [], services: [], people: [], invitations: [] });
     render(<MemoryRouter><TemplatesView /></MemoryRouter>);
-    expect(screen.getByText("No hay templates")).toBeInTheDocument();
+    expect(screen.getByText(/No hay templates/)).toBeInTheDocument();
   });
 
   it("renders templates from store", () => {

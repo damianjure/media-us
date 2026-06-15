@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, Users } from "lucide-react";
 import { useAppStore } from "./useAppStore";
 import { PersonForm } from "./PersonForm";
 import { createPerson } from "../../domain/models/Person";
@@ -43,9 +43,15 @@ export function PeopleView() {
       )}
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-slate-400 text-center py-12">
-          {people.length === 0 ? "No hay personas. Agregá la primera." : "Sin resultados."}
-        </p>
+        <div className="text-center py-16">
+          <Users className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+          <p className="text-sm text-slate-400">
+            {people.length === 0 ? "No hay personas. Agregá la primera." : "Sin resultados."}
+          </p>
+          {people.length === 0 && (
+            <button onClick={() => setShowForm(true)} className="mt-4 text-sm text-indigo-600 font-medium">Agregar persona</button>
+          )}
+        </div>
       ) : (
         <div className="flex flex-col gap-2">
           {filtered.map((p) => (

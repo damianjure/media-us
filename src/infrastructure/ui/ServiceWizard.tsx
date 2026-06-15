@@ -53,10 +53,10 @@ export function ServiceWizard({ onSubmit, onClose, defaultDate, selectedAreaIds 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <div className="relative bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-xl max-h-[90vh] overflow-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl z-10">×</button>
+      <div className="relative bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-xl max-h-[90vh] overflow-y-auto overscroll-contain shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl z-10 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Cerrar">×</button>
 
-        <div className="p-6">
+        <div className="p-6 pt-2">
           <h1 className="text-xl font-bold mb-6">Crear Nuevo Servicio</h1>
 
           {/* Stepper */}

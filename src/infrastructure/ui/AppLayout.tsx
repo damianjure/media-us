@@ -45,13 +45,15 @@ export function AppLayout() {
             onClick={() => setMenuOpen(false)}
           >
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="absolute right-0 top-0 bottom-0 w-64 bg-white dark:bg-slate-900 shadow-xl p-4"
+              className="absolute bottom-0 left-0 right-0 bg-white dark:bg-slate-900 shadow-xl p-4 rounded-t-2xl max-h-[70vh] overflow-auto"
             >
+              {/* Drag handle */}
+              <div className="w-10 h-1 bg-slate-300 dark:bg-slate-600 rounded-full mx-auto mb-4" />
               <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">
                 Menú
               </h3>

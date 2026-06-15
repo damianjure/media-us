@@ -35,8 +35,9 @@ export function AreasView() {
 
       {showForm && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-end sm:items-center justify-center" onClick={() => setShowForm(false)}>
-          <div className="bg-white dark:bg-slate-900 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[80vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-base font-semibold p-4 border-b border-slate-200 dark:border-slate-800">Nueva Área</h3>
+          <div className="bg-white dark:bg-slate-900 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-md max-h-[80vh] overflow-y-auto overscroll-contain" onClick={(e) => e.stopPropagation()}>
+            <div className="w-10 h-1 bg-slate-300 dark:bg-slate-600 rounded-full mx-auto mt-3" />
+            <h3 className="text-base font-semibold px-4 pt-3">Nueva Área</h3>
             <AreaForm onSubmit={(data) => {
               addArea(createArea(data));
               setShowForm(false);

@@ -61,7 +61,7 @@ export function MatrixView() {
         />
       )}
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto -mx-4 px-4 overscroll-x-contain">
         <table className="w-full border-collapse min-w-[500px]">
           <thead>
             <tr>
@@ -104,6 +104,7 @@ export function MatrixView() {
           </tbody>
         </table>
       </div>
+      <p className="text-xs text-slate-400 mt-2 text-center sm:hidden">← deslizá para ver más →</p>
     </div>
   );
 }

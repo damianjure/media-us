@@ -1,44 +1,32 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Plus, GripVertical, Music, Pause, Type, Film, Send } from "lucide-react";
+import { ArrowLeft, Plus, GripVertical, Music, Pause, Type, Film } from "lucide-react";
 import { Reorder } from "framer-motion";
 import { useAppStore } from "./useAppStore";
-import { SendInvitations } from "../../application/use-cases/SendInvitations";
-import { InvitationRepository } from "../firebase/invitation-repository";
+import { createAssignment } from "../../domain/models/ServiceAssignment";
 import { createServiceOrder } from "../../domain/models/ServiceOrder";
 
 const typeIcons: Record<string, typeof Music> = { song: Music, space: Pause, header: Type, media: Film };
+const colorClass: Record<string, string> = {
+  purple: "bg-purple-500", yellow: "bg-yellow-500", orange: "bg-orange-500",
+  green: "bg-green-500", blue: "bg-blue-500", red: "bg-red-500", pink: "bg-pink-500",
+};
 
 export function ServiceDetailView() {
   const { id } = useParams<{ id: string }>();
-  const { services, invitations, addInvitation, updateInvitationStatus, saveOrder, getOrder, people } = useAppStore();
+  const { services, areas, people, assignments, addAssignment, updateAssignmentStatus, saveOrder, getOrder } = useAppStore();
 
   const service = services.find((s) => s.id === id);
-  const repo = new InvitationRepository();
-  const sendInvitations = new SendInvitations(repo);
+  if (!service) return <div className="p-8 text-center"><p className="text-slate-400">Servicio no encontrado</p><Link to="/app/services" className="text-indigo-600 text-sm mt-2 block">Volver</Link></div>;
 
-  if (!service) {
-    return (
-      <div className="p-8 text-center">
-        <p className="text-slate-400">Servicio no encontrado</p>
-        <Link to="/app/services" className="text-indigo-600 text-sm mt-2 block">Volver</Link>
-      </div>
-    );
-  }
-
-  const serviceInvites = invitations.filter((i) => i.serviceId === service.id);
-  const accepted = serviceInvites.filter((i) => i.status === "accepted").length;
-  const declined = serviceInvites.filter((i) => i.status === "declined").length;
-  const pending = serviceInvites.filter((i) => i.status === "pending").length;
+  const serviceAreas = areas.filter((a) => service.areaIds.includes(a.id));
+  const serviceAssignments = assignments.filter((a) => a.serviceId === service.id);
   const order = getOrder(service.id) ?? createServiceOrder({ serviceId: service.id, items: [] });
 
-  const handleSendInvites = async () => {
-    const personIds = people.slice(0, 3).map((p) => p.id);
-    const invs = await sendInvitations.execute({ serviceId: service.id, personIds });
-    invs.forEach((inv) => addInvitation(inv));
-  };
+  const getAreaAssignments = (areaId: string) => serviceAssignments.filter((a) => a.areaId === areaId);
 
-  const statusLabel: Record<string, string> = {
-    draft: "Borrador", pending: "Pendiente", confirmed: "Confirmado", cancelled: "Cancelado",
+  const handleAssign = (areaId: string, personId: string) => {
+    const a = createAssignment({ serviceId: service.id, areaId, personId, roleId: "default" });
+    addAssignment(a);
   };
 
   return (
@@ -48,59 +36,71 @@ export function ServiceDetailView() {
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </Link>
         <div className="flex-1">
-          <h1 className="text-base font-semibold text-slate-900 dark:text-white">{service.typeId} - {service.date}</h1>
-          <p className="text-xs text-slate-500">{service.time} · {statusLabel[service.status]}</p>
+          <h1 className="text-base font-semibold">{service.typeId} - {service.date}</h1>
+          <p className="text-xs text-slate-500">{service.time}{service.endTime ? ` → ${service.endTime}` : ""}{service.location ? ` · ${service.location}` : ""}</p>
         </div>
       </header>
 
-      <div className="p-4 flex gap-3">
-        {[
-          { label: "Aceptados", value: String(accepted), color: "text-emerald-600" },
-          { label: "Declinados", value: String(declined), color: "text-red-500" },
-          { label: "Pendientes", value: String(pending), color: "text-amber-500" },
-        ].map(({ label, value, color }) => (
-          <div key={label} className="flex-1 bg-white dark:bg-slate-900 rounded-xl p-3 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800">
-            <p className="text-[10px] text-slate-400 uppercase font-medium mb-1">{label}</p>
-            <p className={`text-lg font-bold ${color}`}>{value}</p>
-          </div>
-        ))}
-      </div>
-
-      <div className="px-4 mb-4">
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-3 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-xs font-semibold text-slate-700 dark:text-slate-300">Invitaciones</h3>
-            <button onClick={handleSendInvites} className="flex items-center gap-1 text-xs text-indigo-600 font-medium">
-              <Send className="w-3 h-3" /> Enviar
-            </button>
-          </div>
-          {serviceInvites.length === 0 ? (
-            <p className="text-xs text-slate-400 text-center py-2">No hay invitaciones enviadas</p>
-          ) : (
-            <div className="flex flex-col gap-1">
-              {serviceInvites.map((inv) => {
-                const person = people.find((p) => p.id === inv.personId);
-                return (
-                  <div key={inv.id} className="flex items-center justify-between text-xs">
-                    <span className="text-slate-700 dark:text-slate-300">{person?.name ?? inv.personId}</span>
-                    <select
-                      value={inv.status}
-                      onChange={(e) => updateInvitationStatus(inv.id, e.target.value)}
-                      className="text-xs rounded-lg border border-slate-200 dark:border-slate-700 px-1.5 py-0.5 bg-white dark:bg-slate-800"
-                    >
-                      <option value="pending">⏳ Pendiente</option>
-                      <option value="accepted">✓ Aceptado</option>
-                      <option value="declined">✗ Declinado</option>
-                    </select>
+      {/* Area sections with assignments */}
+      {serviceAreas.length > 0 && (
+        <div className="p-4 space-y-3">
+          {serviceAreas.map((area) => {
+            const areaAssigns = getAreaAssignments(area.id);
+            const confirmed = areaAssigns.filter((a) => a.status === "accepted").length;
+            return (
+              <div key={area.id} className="bg-white dark:bg-slate-900 rounded-xl p-3 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={`w-8 h-8 rounded-full ${colorClass[area.color] || "bg-slate-400"} flex items-center justify-center text-white text-xs`}>
+                    {area.icon?.slice(0, 3) || area.name[0]}
                   </div>
-                );
-              })}
-            </div>
-          )}
+                  <div className="flex-1">
+                    <h3 className="text-sm font-semibold">{area.name}</h3>
+                    <p className="text-xs text-slate-400">{confirmed}/{areaAssigns.length} confirmados</p>
+                  </div>
+                  <select
+                    onChange={(e) => {
+                      if (e.target.value) handleAssign(area.id, e.target.value);
+                    }}
+                    value=""
+                    className="text-xs rounded-lg border border-slate-200 dark:border-slate-700 px-2 py-1 bg-white dark:bg-zinc-800"
+                  >
+                    <option value="">+ Asignar</option>
+                    {people.map((p) => (
+                      <option key={p.id} value={p.id}>{p.name}</option>
+                    ))}
+                  </select>
+                </div>
+                {areaAssigns.length > 0 ? (
+                  <div className="flex flex-col gap-1 pl-11">
+                    {areaAssigns.map((a) => {
+                      const person = people.find((p) => p.id === a.personId);
+                      return (
+                        <div key={a.id} className="flex items-center justify-between text-xs">
+                          <span>{person?.name ?? a.personId}</span>
+                          <select
+                            value={a.status}
+                            onChange={(e) => updateAssignmentStatus(a.id, e.target.value)}
+                            className="text-xs rounded-lg border border-slate-200 dark:border-slate-700 px-1 py-0.5"
+                          >
+                            <option value="pending">⏳ Pendiente</option>
+                            <option value="accepted">✓ Confirmado</option>
+                            <option value="declined">✗ Declinado</option>
+                          </select>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-400 pl-11">Sin asignaciones</p>
+                )}
+              </div>
+            );
+          })}
         </div>
-      </div>
+      )}
 
-      <div className="px-4">
+      {/* Order of service */}
+      <div className="px-4 mt-4">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Orden del Servicio</h2>
           <button className="flex items-center gap-1 text-xs text-indigo-600 font-medium">
@@ -115,7 +115,7 @@ export function ServiceDetailView() {
                 <div className="flex items-center gap-3 bg-white dark:bg-slate-900 rounded-xl p-3 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 cursor-grab active:cursor-grabbing">
                   <GripVertical className="w-4 h-4 text-slate-300 dark:text-slate-600" />
                   <Icon className="w-4 h-4 text-slate-400" />
-                  <span className="text-sm text-slate-700 dark:text-slate-200 flex-1">{item.label}</span>
+                  <span className="text-sm flex-1">{item.label}</span>
                   <span className="text-[10px] text-slate-400 uppercase bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">{item.type}</span>
                 </div>
               </Reorder.Item>
@@ -123,8 +123,6 @@ export function ServiceDetailView() {
           })}
         </Reorder.Group>
       </div>
-
-      <p className="text-xs text-slate-400 mt-6 text-center">Arrastrá los items para reordenar</p>
     </div>
   );
 }

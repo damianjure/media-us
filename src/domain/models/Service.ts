@@ -13,15 +13,23 @@ export interface Service {
   id: string;
   date: string;
   time: string;
+  endTime: string;
   typeId: string;
   status: ServiceStatus;
+  location: string;
+  bannerUrl: string;
+  areaIds: string[];
   notes: string;
 }
 
 export function createService(input: {
   date: string;
   time: string;
+  endTime?: string;
   typeId: string;
+  location?: string;
+  bannerUrl?: string;
+  areaIds?: string[];
   notes?: string;
   status?: ServiceStatus;
 }): Service {
@@ -33,8 +41,12 @@ export function createService(input: {
     id: nanoid(),
     date: input.date,
     time: input.time,
+    endTime: input.endTime ?? "",
     typeId: input.typeId,
     status: input.status ?? ServiceStatus.Draft,
+    location: input.location ?? "",
+    bannerUrl: input.bannerUrl ?? "",
+    areaIds: input.areaIds ?? [],
     notes: input.notes ?? "",
   };
 }

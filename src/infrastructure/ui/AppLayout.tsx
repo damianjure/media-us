@@ -58,7 +58,9 @@ export function AppLayout() {
               <nav className="flex flex-col gap-1">
                 {[
                   { to: "/teams", label: "Equipos" },
-                  { to: "/app/services", label: "Tipos de Servicio" },
+                  { to: "/areas", label: "Áreas" },
+                  { to: "/templates", label: "Templates" },
+                  { to: "/proximos", label: "Próximos" },
                 ].map((item) => (
                   <NavLink
                     key={item.to}

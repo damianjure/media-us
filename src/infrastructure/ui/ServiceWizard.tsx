@@ -6,11 +6,12 @@ interface ServiceWizardProps {
   onSubmit: (data: ReturnType<typeof createService>) => void;
   onClose: () => void;
   defaultDate?: string;
+  selectedAreaIds?: string[];
 }
 
 const TIPOS = ["Domingo", "Especial", "Conferencia", "Vigilia", "Ensayo"];
 
-export function ServiceWizard({ onSubmit, onClose, defaultDate }: ServiceWizardProps) {
+export function ServiceWizard({ onSubmit, onClose, defaultDate, selectedAreaIds = [] }: ServiceWizardProps) {
   const { areas } = useAppStore();
   const [step, setStep] = useState(1);
   const [tipo, setTipo] = useState("");
@@ -19,7 +20,7 @@ export function ServiceWizard({ onSubmit, onClose, defaultDate }: ServiceWizardP
   const [desde, setDesde] = useState("");
   const [hasta, setHasta] = useState("");
   const [ubicacion, setUbicacion] = useState("");
-  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
+  const [selectedAreas, setSelectedAreas] = useState<string[]>(selectedAreaIds);
 
   const toggleArea = (id: string) => {
     setSelectedAreas((prev) =>

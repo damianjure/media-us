@@ -9,6 +9,7 @@ import { ServiceDetailView } from "./infrastructure/ui/ServiceDetailView";
 import { TeamManagementView } from "./infrastructure/ui/TeamManagementView";
 import { WireframesView } from "./infrastructure/ui/WireframesView";
 import { AreasView } from "./infrastructure/ui/AreasView";
+import { TemplatesView } from "./infrastructure/ui/TemplatesView";
 
 const router = createBrowserRouter([
   { path: "/", element: <AuthScreen /> },
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
   { path: "/teams", element: <TeamManagementView /> },
   { path: "/wireframes", element: <WireframesView /> },
   { path: "/areas", element: <AreasView /> },
+  { path: "/templates", element: <TemplatesView /> },
 ]);
 
 export function App() {

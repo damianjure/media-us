@@ -50,8 +50,8 @@ export function ServicesListView() {
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Servicios</h2>
-        <button onClick={() => setShowForm(true)} className="p-2 bg-indigo-600 rounded-xl text-white">
-          <Plus className="w-4 h-4" />
+        <button onClick={() => setShowForm(true)} className="p-3 bg-indigo-600 rounded-xl text-white hover:bg-indigo-700 min-w-[44px] min-h-[44px] flex items-center justify-center active:scale-95 transition-transform" aria-label="Crear servicio">
+          <Plus className="w-5 h-5" />
         </button>
       </div>
 

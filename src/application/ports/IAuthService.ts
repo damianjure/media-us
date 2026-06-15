@@ -7,7 +7,7 @@ export interface AuthUser {
 export interface IAuthService {
   signInWithGoogle(): Promise<AuthUser>;
   signInWithApple(): Promise<AuthUser>;
-  signInWithEmail(email: string): Promise<AuthUser>;
+  signInWithEmail(email: string, password: string): Promise<AuthUser>;
   signOut(): Promise<void>;
   onAuthStateChanged(callback: (user: AuthUser | null) => void): () => void;
 }
